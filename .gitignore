@@ -1,5 +1,4 @@
-RaspberryCast.log
-rcast.log
-*.tmp
-*.pyc
-*~
+.PyCharm.java/
+.PyCharm/
+.idea/
+
