@@ -1,4 +1,7 @@
 import os
+import logging
+
+logger = logging.getLogger("RaspberryCast")
 
 
 def getimages():
@@ -9,6 +12,7 @@ def getimages():
         exists = os.path.isfile(override)
         if exists:
             # Override image
+            logger.info("Overriding image with " + override)
             images[img] = override
         else:
             # use standard image
