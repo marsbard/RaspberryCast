@@ -53,7 +53,7 @@ except OSError as e:
         raise
 
 if config["new_log"]:
-    os.system("sudo fbi -T 1 --noverbose -a  images/ready.jpg")
+    os.system("sudo fbi -T 1 -a --noverbose " + images['ready'])
 
 setState("0")
 open('video.queue', 'w').close()  # Reset queue
