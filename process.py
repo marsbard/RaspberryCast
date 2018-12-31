@@ -77,7 +77,10 @@ def return_full_url(url, sub=False, slow_mode=False):
             "Result is none, returning none. Cancelling following function.")
         return None
 
+    logger.debug(result.keys())
+
     if 'entries' in result:  # Can be a playlist or a list of videos
+        logger(result['entries'])
         video = result['entries'][0]
     else:
         video = result  # Just a video
