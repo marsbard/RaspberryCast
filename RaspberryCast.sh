@@ -14,6 +14,7 @@ if [ $1 = "start" ]; then
 		exit 0
 	fi
 	echo "Checking for updates."
+	sudo pip install -U youtube-dl &
 	git pull
 	echo "Starting RaspberryCast server."
 	./server.py &
