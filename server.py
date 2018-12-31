@@ -4,6 +4,8 @@ import logging
 import os
 import sys
 import json
+import funcs
+
 try:
     # this works in Python3
     from urllib.request import urlretrieve
@@ -14,6 +16,8 @@ from bottle import Bottle, SimpleTemplate, request, response, \
                    template, run, static_file
 from process import launchvideo, queuevideo, playlist, \
                     setState, getState, setVolume
+
+images = funcs.getimages()
 
 if len(sys.argv) > 1:
     config_file = sys.argv[1]

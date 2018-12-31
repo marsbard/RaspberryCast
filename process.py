@@ -2,9 +2,15 @@ import youtube_dl
 import os
 import threading
 import logging
-import json
+# import json
+import funcs
+
+
 logger = logging.getLogger("RaspberryCast")
 volume = 0
+
+
+images = funcs.getimages()
 
 
 def launchvideo(url, config, sub=False):
@@ -13,7 +19,7 @@ def launchvideo(url, config, sub=False):
     os.system("echo -n q > /tmp/cmd &")  # Kill previous instance of OMX
 
     if config["new_log"]:
-        os.system("sudo fbi -T 1 -a --noverbose images/processing.jpg")
+        os.system("sudo fbi -T 1 -a --noverbose " + images['processing'])
 
     logger.info('Extracting source video URL...')
     out = return_full_url(url, sub=sub, slow_mode=config["slow_mode"])
@@ -185,7 +191,7 @@ def playWithOMX(url, sub, width="", height="", new_log=False):
             else:
                 logger.info("Playlist empty, skipping.")
                 if new_log:
-                    os.system("sudo fbi -T 1 -a --noverbose images/ready.jpg")
+                    os.system("sudo fbi -T 1 -a --noverbose " + images['ready'])
 
 
 def setState(state):
