@@ -1,4 +1,6 @@
 .PyCharm.java/
 .PyCharm/
 .idea/
-
+RaspberryCast.log
+*.pyc
+state.tmp

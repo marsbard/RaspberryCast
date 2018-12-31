@@ -2,6 +2,6 @@
 
 cd $(dirname "$0")
 
-./RaspberryCast stop
+sudo ./RaspberryCast.sh stop
 
-sudo ./RaspberryCast start
+./RaspberryCast.sh start
