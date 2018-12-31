@@ -66,7 +66,7 @@ def return_full_url(url, sub=False, slow_mode=False):
     ydl = youtube_dl.YoutubeDL(
         {
             'logger': logger,
-            'noplaylist': True,
+            'noplaylist': False,
             'ignoreerrors': True,
         })  # Ignore errors in case of error in long playlists
     with ydl:  # Downloading youtub-dl infos. We just want to extract the info
