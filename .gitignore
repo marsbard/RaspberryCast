@@ -4,3 +4,5 @@
 RaspberryCast.log
 *.pyc
 state.tmp
+raspberrycast.conf
+video.queue
