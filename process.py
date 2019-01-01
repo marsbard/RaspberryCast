@@ -9,6 +9,7 @@ import funcs
 logger = logging.getLogger("RaspberryCast")
 volume = 0
 
+# see README.eq to set up equaliser
 # original would be: "-o both"
 omxoptions = "-o alsa:equal"
 
