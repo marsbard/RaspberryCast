@@ -9,9 +9,10 @@ import funcs
 logger = logging.getLogger("RaspberryCast")
 volume = 0
 
-# see README.eq to set up equaliser
+# see README.eq to set up equaliser and use "-o alsa:equal"
 # original would be: "-o both"
-omxoptions = "-o alsa:equal"
+# -g gives omxplayer.log but it's very verbose
+omxoptions = "-o alsa:equal --no-boost-on-downmix"
 
 images = funcs.getimages()
 
@@ -161,20 +162,25 @@ def playWithOMX(url, sub, width="", height="", new_log=False):
     if width or height:
         resolution = " --win '0 0 {0} {1}'".format(width, height)
 
+
     setState("1")
     if sub:
-        os.system(
-            "omxplayer -b -r " + omxoptions + "'" + url + "'" + resolution +
-            " --vol " + str(volume) +
-            " --subtitles subtitle.srt < /tmp/cmd"
-        )
+        omxcmd = "omxplayer -b -r " + omxoptions + " '" + url + "'" + resolution + " --vol " + str(volume) + " --subtitles subtitle.srt < /tmp/cmd"
+        logger.debug(omxcmd)
+        os.system(omxcmd)
     elif url is None:
         pass
     else:
-        os.system(
-            "omxplayer -b -r " + omxoptions + "'" + url + "' " + resolution + " --vol " +
-            str(volume) + " < /tmp/cmd"
-        )
+        omxcmd = "omxplayer -I -b -r " + omxoptions + " '" + url + "' " + resolution + " --vol " + str(volume) + " < /tmp/cmd "
+        logger.debug(omxcmd)
+        os.system(omxcmd)
+
+    logger.debug("Finished omxplayer")
+
+    os.system("echo -n q > /tmp/cmd &")  # Kill previous instance of OMX
+    #os.system("killall -9 omxplayer.bin omxplayer; sleep 1")
+    os.system("sudo killall -9 fbi")
+
 
     if getState() != "2":  # In case we are again in the launchvideo function
         setState("0")
