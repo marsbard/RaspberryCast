@@ -7,7 +7,6 @@ import funcs
 import time
 
 logger = logging.getLogger("RaspberryCast")
-volume = 0
 
 # see README.eq to set up equaliser and use "-o alsa:equal"
 # original would be: "-o both"
@@ -18,6 +17,8 @@ options = funcs.loadOptions()
 if options.get('omxoptions') is None:
     options['omxoptions'] = "-o both"
     funcs.saveOptions(options)
+
+volume = options.get('volume', 0)
 
 images = funcs.getimages()
 
@@ -170,16 +171,17 @@ def playWithOMX(url, sub, width="", height="", new_log=False):
     if width or height:
         resolution = " --win '0 0 {0} {1}'".format(width, height)
 
+    options = funcs.loadOptions()
 
     setState("1")
     if sub:
-        omxcmd = "omxplayer -b -r " + options['omxoptions'] + " '" + url + "'" + resolution + " --vol " + str(volume) + " --subtitles subtitle.srt < /tmp/cmd"
+        omxcmd = "omxplayer -b -r " + options['omxoptions'] + " '" + url + "'" + resolution + " --vol " + str(options['volume']) + " --subtitles subtitle.srt < /tmp/cmd"
         logger.debug(omxcmd)
         os.system(omxcmd)
     elif url is None:
         pass
     else:
-        omxcmd = "omxplayer -b -r " + options['omxoptions'] + " '" + url + "' " + resolution + " --vol " + str(volume) + " < /tmp/cmd "
+        omxcmd = "omxplayer -b -r " + options['omxoptions'] + " '" + url + "' " + resolution + " --vol " + str(options['volume']) + " < /tmp/cmd "
         logger.debug(omxcmd)
         os.system(omxcmd)
 
@@ -228,11 +230,12 @@ def getState():
 
 def setVolume(vol):
     global volume
+    options = funcs.loadOptions()
+
     if vol == "more":
         volume += 300
     if vol == "less":
         volume -= 300
 
-    options = funcs.loadOptions()
     options['volume']=volume
     funcs.saveOptions(options)

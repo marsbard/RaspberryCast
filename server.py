@@ -201,14 +201,17 @@ def video():
 
 @app.route('/sound')
 def sound():
+
     vol = request.query['vol']
+    setVolume(vol)
+    options = funcs.loadOptions()
+
     if vol == "more":
-        logger.info('REMOTE: Command : Sound ++')
+        logger.info('REMOTE: Command : Sound ++ > ' + str(options['volume']/100) + ' dB')
         os.system("echo -n + > /tmp/cmd &")
     elif vol == "less":
-        logger.info('REMOTE: Command : Sound --')
+        logger.info('REMOTE: Command : Sound -- > ' + str(options['volume']/100) + ' dB')
         os.system("echo -n - > /tmp/cmd &")
-    setVolume(vol)
     return "1"
 
 
