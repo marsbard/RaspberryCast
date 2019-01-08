@@ -1,0 +1,3 @@
+{
+  "omxoptions": "-o alsa:equal --no-boost-on-downmix"
+}

@@ -2,7 +2,7 @@ import youtube_dl
 import os
 import threading
 import logging
-# import json
+import json
 import funcs
 
 
@@ -11,8 +11,21 @@ volume = 0
 
 # see README.eq to set up equaliser and use "-o alsa:equal"
 # original would be: "-o both"
-# -g gives omxplayer.log but it's very verbose
-omxoptions = "-o alsa:equal --no-boost-on-downmix"
+# -g gives omxplayer.log but it's very verbose]
+
+omxoptions = "-o both"
+
+try:
+    with open('config.json') as f:
+        options = json.load(f)
+        omxoptions = options['omxoptions']
+except:
+    pass
+
+logger.debug("omxoptions=" + omxoptions)
+
+#omxoptions = "-o alsa:equal --no-boost-on-downmix"
+#omxoptions = "-o alsa:pzamcomp --no-boost-on-downmix"
 
 images = funcs.getimages()
 
@@ -81,7 +94,10 @@ def return_full_url(url, sub=False, slow_mode=False):
             "Result is none, returning none. Cancelling following function.")
         return None
 
-    logger.debug(result.keys())
+    #logger.debug(json.dumps(result))
+
+    # with open('request.json', 'w') as outfile:
+    #     json.dump(result, outfile)
 
     if 'entries' in result:  # Can be a playlist or a list of videos
         logger(result['entries'])
@@ -171,7 +187,7 @@ def playWithOMX(url, sub, width="", height="", new_log=False):
     elif url is None:
         pass
     else:
-        omxcmd = "omxplayer -I -b -r " + omxoptions + " '" + url + "' " + resolution + " --vol " + str(volume) + " < /tmp/cmd "
+        omxcmd = "omxplayer -b -r " + omxoptions + " '" + url + "' " + resolution + " --vol " + str(volume) + " < /tmp/cmd "
         logger.debug(omxcmd)
         os.system(omxcmd)
 

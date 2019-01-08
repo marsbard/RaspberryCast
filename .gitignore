@@ -6,3 +6,13 @@ RaspberryCast.log
 state.tmp
 raspberrycast.conf
 video.queue
+omxplayer.log
+omxplayer.old.log
+omxplayer.out
+.atom
+.config
+.cache
+.pki
+.local
+request.json
+config.json
