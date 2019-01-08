@@ -4,7 +4,7 @@ import threading
 import logging
 import json
 import funcs
-
+import time
 
 logger = logging.getLogger("RaspberryCast")
 volume = 0
@@ -13,19 +13,11 @@ volume = 0
 # original would be: "-o both"
 # -g gives omxplayer.log but it's very verbose]
 
-omxoptions = "-o both"
+options = funcs.loadOptions()
 
-try:
-    with open('config.json') as f:
-        options = json.load(f)
-        omxoptions = options['omxoptions']
-except:
-    pass
-
-logger.debug("omxoptions=" + omxoptions)
-
-#omxoptions = "-o alsa:equal --no-boost-on-downmix"
-#omxoptions = "-o alsa:pzamcomp --no-boost-on-downmix"
+if options.get('omxoptions') is None:
+    options['omxoptions'] = "-o both"
+    funcs.saveOptions(options)
 
 images = funcs.getimages()
 
@@ -181,17 +173,19 @@ def playWithOMX(url, sub, width="", height="", new_log=False):
 
     setState("1")
     if sub:
-        omxcmd = "omxplayer -b -r " + omxoptions + " '" + url + "'" + resolution + " --vol " + str(volume) + " --subtitles subtitle.srt < /tmp/cmd"
+        omxcmd = "omxplayer -b -r " + options['omxoptions'] + " '" + url + "'" + resolution + " --vol " + str(volume) + " --subtitles subtitle.srt < /tmp/cmd"
         logger.debug(omxcmd)
         os.system(omxcmd)
     elif url is None:
         pass
     else:
-        omxcmd = "omxplayer -b -r " + omxoptions + " '" + url + "' " + resolution + " --vol " + str(volume) + " < /tmp/cmd "
+        omxcmd = "omxplayer -b -r " + options['omxoptions'] + " '" + url + "' " + resolution + " --vol " + str(volume) + " < /tmp/cmd "
         logger.debug(omxcmd)
         os.system(omxcmd)
 
     logger.debug("Finished omxplayer")
+
+    time.sleep(2)
 
     os.system("echo -n q > /tmp/cmd &")  # Kill previous instance of OMX
     #os.system("killall -9 omxplayer.bin omxplayer; sleep 1")
@@ -238,3 +232,7 @@ def setVolume(vol):
         volume += 300
     if vol == "less":
         volume -= 300
+
+    options = funcs.loadOptions()
+    options['volume']=volume
+    funcs.saveOptions(options)
