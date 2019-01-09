@@ -233,9 +233,9 @@ def setVolume(vol):
     options = funcs.loadOptions()
 
     if vol == "more":
-        volume += 150
+        volume += 300
     if vol == "less":
-        volume -= 150
+        volume -= 300
 
     options['volume']=volume
     funcs.saveOptions(options)
